@@ -284,6 +284,11 @@ public class ConsoleLineInterface {
 
         System.out.print("Выберите блюдо: ");
         int dishIndex = tryScanInteger();
+
+        if (dishIndex < 0 || dishIndex >= dishes.size()) {
+            throw new IllegalArgumentException("Неверный выбор блюда");
+        }
+
         return dishes.get(dishIndex).getName();
     }
 
@@ -301,7 +306,6 @@ public class ConsoleLineInterface {
             String input = scanner.nextLine().trim();
             return Double.parseDouble(input);
         } catch (Exception e) {
-            System.out.println("ok");
             throw new RuntimeException("Неверно введено число");
         }
     }
