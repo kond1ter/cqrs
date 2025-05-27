@@ -17,10 +17,12 @@ import command.repository.DishRepository;
 import command.repository.OrderRepository;
 import common.event.EventBus;
 import query.repository.DishViewRepository;
+import query.repository.OrderTransactionViewRepository;
 import query.repository.OrderViewRepository;
 import query.service.DishQueryService;
 import query.service.EventHandler;
 import query.service.OrderQueryService;
+import query.service.OrderTransactionQueryService;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -28,8 +30,9 @@ public class App {
         OrderRepository commandOrderRepository = new OrderRepository();
         DishViewRepository queryDishRepository = new DishViewRepository();
         OrderViewRepository queryOrderRepository = new OrderViewRepository();
+        OrderTransactionViewRepository queryOrderTransactionRepository = new OrderTransactionViewRepository();
 
-        EventHandler eventHandler = new EventHandler(queryOrderRepository, queryDishRepository);
+        EventHandler eventHandler = new EventHandler(queryOrderRepository, queryDishRepository, queryOrderTransactionRepository);
         EventBus.getInstance().register(eventHandler);
 
         CommandBus commandBus = new CommandBus();
@@ -42,9 +45,9 @@ public class App {
 
         DishQueryService dishQueryService = new DishQueryService(queryDishRepository);
         OrderQueryService orderQueryService = new OrderQueryService(queryOrderRepository);
+        OrderTransactionQueryService orderTransactionQueryService = new OrderTransactionQueryService(queryOrderTransactionRepository);
 
-        RestaurantFacade facade = new RestaurantFacade(commandBus, dishQueryService, orderQueryService);
-
+        RestaurantFacade facade = new RestaurantFacade(commandBus, dishQueryService, orderQueryService, orderTransactionQueryService);
 
         facade.createDish("Стейк", 700);
         facade.createDish("Салат цезарь", 400);
@@ -52,7 +55,6 @@ public class App {
         facade.createDish("Салат зеленый", 400);
         facade.createDish("Баклажаны в панировке", 300);
         facade.createDish("Классический борщ", 600);
-
 
         ConsoleLineInterface cli = new ConsoleLineInterface(facade);
         cli.start();

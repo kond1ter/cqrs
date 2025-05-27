@@ -11,18 +11,24 @@ import command.command.RemoveDishFromOrderCommand;
 import command.handler.CommandBus;
 import query.dto.DishDto;
 import query.dto.OrderDto;
+import query.dto.OrderTransactionDto;
+import query.dto.StatisticsDto;
 import query.service.DishQueryService;
 import query.service.OrderQueryService;
+import query.service.OrderTransactionQueryService;
 
 public class RestaurantFacade {
     private CommandBus commandBus;
     private DishQueryService dishQueryService;
     private OrderQueryService orderQueryService;
+    private OrderTransactionQueryService orderTransactionQueryService;
 
-    public RestaurantFacade(CommandBus commandBus, DishQueryService dishQueryService, OrderQueryService orderQueryService) {
+    public RestaurantFacade(CommandBus commandBus, DishQueryService dishQueryService,
+            OrderQueryService orderQueryService, OrderTransactionQueryService orderTransactionQueryService) {
         this.commandBus = commandBus;
         this.dishQueryService = dishQueryService;
         this.orderQueryService = orderQueryService;
+        this.orderTransactionQueryService = orderTransactionQueryService;
     }
 
     public void createDish(String dishName, double dishPrice) {
@@ -59,5 +65,13 @@ public class RestaurantFacade {
 
     public OrderDto getOrder(int orderNumber) {
         return orderQueryService.getOrderByNumber(orderNumber);
+    }
+
+    public StatisticsDto getStatistics() {
+        return orderQueryService.getStatistics();
+    }
+
+    public List<OrderTransactionDto> getTransactions() {
+        return orderTransactionQueryService.getAll();
     }
 }

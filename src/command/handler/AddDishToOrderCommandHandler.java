@@ -21,6 +21,5 @@ public class AddDishToOrderCommandHandler implements CommandHandler<AddDishToOrd
         Dish dish = dishRepository.findByName(command.getDishName());
         
         order.addDish(dish);
-        orderRepository.save(order);
     }
 }

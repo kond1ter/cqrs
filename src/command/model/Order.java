@@ -19,6 +19,10 @@ public class Order {
     private OrderStatus status;
 
     public Order(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("Номер заказа не может быть отрицательным");
+        }
+
         this.id = UUID.randomUUID().toString();
         this.status = OrderStatus.IN_PROGRESS;
         this.number = number;
@@ -33,11 +37,10 @@ public class Order {
 
         if (dishes.get(dish) == null) {
             dishes.put(dish, 1);
-            return;
+        } else {
+            dishes.put(dish, dishes.get(dish) + 1);
         }
-
-        dishes.put(dish, dishes.get(dish) + 1);
-
+ 
         EventBus.getInstance()
                 .publish(new DishAddedToOrderEvent(id, dish.getName()));
     }
@@ -47,12 +50,11 @@ public class Order {
             throw new InvalidOrderOperationException("Ошибка при удалении блюда " + dish.getName() + " из заказа с номером " + number + ": данного блюда не существует в заказе");
         }
 
-        if (dishes.get(dish) == 0) {
+        if (dishes.get(dish) == 1) {
             dishes.remove(dish);
-            return;
+        } else {
+            dishes.put(dish, dishes.get(dish) - 1);
         }
-
-        dishes.put(dish, dishes.get(dish) - 1);
 
         EventBus.getInstance()
                 .publish(new DishRemovedFromOrderEvent(id, dish.getName()));
@@ -68,7 +70,7 @@ public class Order {
 
     public void cancel() {
         checkStatusIsSetted();
-        status = OrderStatus.COMPLETED;
+        status = OrderStatus.CANCELLED;
 
         EventBus.getInstance()
                 .publish(new OrderCompletedEvent(id));

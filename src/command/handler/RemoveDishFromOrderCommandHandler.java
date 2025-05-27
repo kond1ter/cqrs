@@ -20,7 +20,7 @@ public class RemoveDishFromOrderCommandHandler implements CommandHandler<RemoveD
         Order order = orderRepository.findByOrderNumber(command.getOrderNumber());
         Dish dish = dishRepository.findByName(command.getDishName());
         
-        order.addDish(dish);
+        order.removeDish(dish);
     }
 
 }

@@ -58,7 +58,7 @@ public class OrderView {
     }
 
     public void removeDish(DishView dish) {
-        if (dishes.get(dish) == 0) {
+        if (dishes.get(dish) == 1) {
             dishes.remove(dish);
             return;
         }

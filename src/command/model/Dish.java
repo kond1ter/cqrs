@@ -11,6 +11,14 @@ public class Dish {
     private double price;
 
     public Dish(String name, double price) {
+        if (price < 0) {
+            throw new IllegalArgumentException("Цена блюда не может быть отрицательной");
+        }
+
+        if (price == 0) {
+            throw new IllegalArgumentException("Блюдо должно приносить доход");
+        }
+
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.price = price;
